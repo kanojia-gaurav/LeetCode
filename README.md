@@ -154,3 +154,135 @@ class Solution:
         return l[::-1][:k]
 
 ```
+
+- **string-encode-and-decode** [link](https://neetcode.io/problems/string-encode-and-decode?list=neetcode150)
+```
+class Solution:
+
+    def encode(self, strs: List[str]) -> str:
+        res = ""
+        for i in strs:
+            res +=  str(len(i)) + "#" + i
+        return res
+
+    def decode(self, s: str) -> List[str]:
+        # pass
+        res, i = [], 0
+
+        while i<len(s):
+            j = i
+            while s[j] != "#":
+                j +=1
+            length = int(s[i:j])
+            res.append(s[j+1: j+1+length])
+            i =  j +1+ length
+        return res
+```
+
+- **products-of-array-discluding-self**  [link](https://neetcode.io/problems/products-of-array-discluding-self?list=neetcode150)
+```
+#note this will give us TLE because its a brute force approach
+class Solution:
+    def productExceptSelf(self, nums: List[int]) -> List[int]:
+
+        res1, res2 = [], []
+        for i in range(len(nums)):
+            res1.append(nums[i+1:])
+            res2.append(nums[:i])
+        # print(res1)
+        # print(res2)
+
+        l = []
+        for i in range(len(res1)):
+            k = 1
+            for j in res1[i]:
+                k = k * j
+            l.append(k)
+            # print(l)
+        l1 = []
+        for i in range(len(res2)):
+            k = 1
+            for j in res2[i]:
+                k = k * j
+            l1.append(k)
+            # print(l1)
+        result = [ int(a) * int(b) for a, b in zip(l, l1)]
+        return result
+
+
+efficient result
+class Solution:
+    def productExceptSelf(self, nums: List[int]) -> List[int]:
+
+        res = [1] * (len(nums))
+
+        prefex = 1
+        for i in range(len(nums)):
+            res[i] = prefex
+            prefex *= nums[i]
+            # print(res)
+
+        postfix = 1
+        for i in range(len(nums) -1, -1, -1):
+            res[i] *= postfix
+            postfix *=nums[i]
+            # print(res)
+
+        return res
+
+```
+- **happy number** [link](https://leetcode.com/problems/happy-number/description/)
+```
+class Solution:
+    def isHappy(self, n: int) -> bool:
+        seen = set()
+        s = str(n)
+
+        while s not in seen:
+            seen.add(s)
+            sum = 0
+            for i in s:
+                sum += int(i) **2
+
+            if sum == 1: 
+                return True
+            s = str(sum)
+        return False
+```
+
+- ** Valid Parentheisis ** [link](https://leetcode.com/problems/valid-parentheses/)
+```
+class Solution:
+    def isValid(self, s: str) -> bool:
+        stack = []
+        open_b = "({["
+
+        for char in s:
+            if char in open_b:
+                stack.append(char)
+            else:
+                if stack:
+                    open = stack.pop()
+                else:
+                    return False
+                
+                if char ==')':
+                    if open == '(':
+                        continue
+                    else:
+                        return False
+                elif char == '}':
+                    if open == '{':
+                        continue
+                    else:
+                        return False
+                elif char == ']':
+                    if open == '[':
+                        continue
+                    else:
+                        return False
+        if stack:
+            return False
+        else:
+            return True
+```
