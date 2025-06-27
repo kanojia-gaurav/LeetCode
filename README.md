@@ -286,3 +286,115 @@ class Solution:
         else:
             return True
 ```
+
+- ** longest-consecutive-sequence ** [link](https://leetcode.com/problems/longest-consecutive-sequence/description/)
+```
+class Solution:
+    def longestConsecutive(self, nums: List[int]) -> int:
+        numset = set(nums)
+        longest = 0
+        for n in numset:
+            if (n - 1) not in numset:
+                length = 0
+                while(n + length) in numset:
+                    length +=1
+                longest = max(length, longest)
+        return longest
+
+
+```
+- ** twoSum **
+```
+class Solution:
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+
+        i, j = 0, len(numbers)-1
+
+        while i < j:
+            total_sum = numbers[i] + numbers[j]
+            if total_sum > target:
+                j -=1
+            elif total_sum < target:
+                i +=1
+            else:
+                return [i+1, j+1]
+        return []
+```	
+
+## Sliding Window	
+
+- ** /maximum-average-subarray-i ** [link](https://leetcode.com/problems/maximum-average-subarray-i/description/)
+```
+#### fixed length
+class Solution:
+    def findMaxAverage(self, nums: List[int], k: int) -> float:
+
+        n = len(nums)
+        cur_sum = 0
+        for i in range(k):
+            cur_sum +=nums[i]
+        
+        max_avg = cur_sum / k
+        
+        for i in range(k, n):
+            cur_sum += nums[i]
+            cur_sum -= nums[i-k]
+
+            avg = cur_sum / k
+
+            max_avg = max(avg, max_avg)
+
+        return max_avg
+```
+
+- ** longest-substring-without-repeating-characters ** [link](https://leetcode.com/problems/longest-substring-without-repeating-characters/description/?envType=problem-list-v2&envId=sliding-window)
+```
+#### Variable leagth
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+
+        sett = set()
+        longest = 0
+        l = 0
+        for r in range(len(s)):
+
+            while s[r] in sett:
+                sett.remove(s[l])
+                l +=1
+            
+            w = (r-l) + 1
+            longest = max(longest, w)
+            sett.add(s[r])
+        return longest
+```
+- ** contains-duplicate-ii ** [link](https://leetcode.com/problems/contains-duplicate-ii/description/?envType=problem-list-v2&envId=sliding-window)
+```
+class Solution:
+    def containsNearbyDuplicate(self, nums: List[int], k: int) -> bool:
+        hashmap = {}
+
+        for i in range(len(nums)):
+            if nums[i] in hashmap and i - hashmap[nums[i]] <=k:
+                return True
+            hashmap[nums[i]] = i
+        return False
+```
+- ** longest-harmonious-subsequence ** [link](https://leetcode.com/problems/longest-harmonious-subsequence/description/?envType=problem-list-v2&envId=sliding-window)
+        
+```
+#hashmap 
+
+class Solution:
+    def findLHS(self, nums: List[int]) -> int:
+        freq = defaultdict(int)
+        res = 0
+        for num in nums:
+            freq[num] += 1
+        # print(freq)
+
+        for num in freq:
+            if num + 1 in freq:
+                res = max(res, freq[num] + freq[num + 1])
+        return res
+
+```
